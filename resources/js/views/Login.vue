@@ -93,7 +93,6 @@ const handleSubmitForm = () => {
 
         router.push({ name: 'home' });
     }).catch((error) => {
-        console.log(error);
         const message = typeof error === 'string' ? error : 'An error occurred while logging in.';
         toast.error(message);
     }).finally(() => {
