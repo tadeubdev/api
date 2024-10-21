@@ -2,7 +2,7 @@ import axios from 'axios';
 
 // const api = axios.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 const api = axios.create({
-    baseURL: import.meta.env.VITE_APP_URL,
+    baseURL: import.meta.env.VITE_API_URL,
     headers: {
         'Content-Type': 'application/json',
         'X-Requested-With': 'XMLHttpRequest',
