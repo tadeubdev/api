@@ -60,8 +60,12 @@
 
 <script setup>
 import { ref } from 'vue';
-import { RouterLink } from 'vue-router';
+import { RouterLink, useRouter } from 'vue-router';
 import authService from '../services/auth-service';
+import { useToast } from 'vue-toastification';
+
+const toast = useToast();
+const router = useRouter();
 
 const formData = ref({
     email: '',
@@ -75,15 +79,25 @@ const handleSubmitForm = () => {
         return;
     }
     if (!formData.value.email || !formData.value.password) {
-        return;
+        return toast.error('Email and password are required.');
     }
     if (!/^[a-zA-Z0-9._-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,6}$/.test(formData.value.email)) {
-        return;
+        return toast.error('Email is invalid.');
     }
-    authService.login(formData.value).then(() => {
-        router.push({ name: 'Home' });
+    const payload = {
+        email: formData.value.email,
+        password: formData.value.password
+    };
+    authService.login(payload).then(() => {
+        toast.success('Logged in successfully.');
+
+        router.push({ name: 'home' });
     }).catch((error) => {
-        console.error(error);
+        console.log(error);
+        const message = typeof error === 'string' ? error : 'An error occurred while logging in.';
+        toast.error(message);
+    }).finally(() => {
+        isSubmitting.value = false;
     });
 }
 </script>
